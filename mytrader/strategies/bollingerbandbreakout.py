@@ -9,7 +9,7 @@ class BollingerbandBreakout(Strategy):
         self.volume_threshold = volume_threshold
         
         self.price = self.candles['close'].iat[0]
-        self.volume = self.candles['volume']
+        self.volume = self.candles['volume'].iat[0]
         reversed_close = self.candles['close'][::-1] # set index -1 is lastest candle
         
         bb_upper, bb_middle, bb_lower = map(lambda channel: channel.iat[-1], ta.BBANDS(reversed_close, timeperiod=20, nbdevup=2))

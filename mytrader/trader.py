@@ -27,31 +27,32 @@ class Trader:
         upbit = Upbit()
         bb_breakout = BollingerbandBreakout()
 
-        while True:
-            now = datetime.now().strftime('%Y-%m-%d, %H:%M:%S')
-            account_btc_value = self.exchange.get_account_asset_value('BTC')
-            entry_qty = str(int(self.exchange.get_account_asset_value('KRW') * 0.1))
-            candles = self.exchange.get_ohlcv('minutes', '240', {
-                "market": 'KRW-BTC',
-                "count": 200
+        # while True:
+        now = datetime.now().strftime('%Y-%m-%d, %H:%M:%S')
+        account_btc_value = upbit.get_account_asset_value('BTC')
+        entry_qty = str(int(upbit.get_account_asset_value('KRW') * 0.1))
+        candles = upbit.get_ohlcv('minutes', '240', {
+            "market": 'KRW-BTC',
+            "count": 200
+        })
+        close = candles['close'].iat[0]
+        bb_breakout_signal = bb_breakout.on_trading_iteration(candles, account_btc_value, 400)
+        if bb_breakout_signal == Signal.LONG_ENTRY_SIGNAL:
+            print(f'entry long: {close}({now})')
+            res = upbit.submit_order({
+                'market': 'KRW-BTC',
+                'side': 'bid',
+                'price': entry_qty,
+                'ord_type': 'price',
             })
-            bb_breakout_signal = bb_breakout.on_trading_iteration(candles, account_btc_value)
-            if bb_breakout_signal == Signal.LONG_ENTRY_SIGNAL:
-                print(f'entry long: {self.price}({now})')
-                res = self.exchange.submit_order({
-                    'market': 'KRW-BTC',
-                    'side': 'bid',
-                    'price': entry_qty,
-                    'ord_type': 'price',
-                })
-            if bb_breakout_signal == Signal.LONG_EXIT_SIGNAL:
-                print('exit signal')
-                res = self.exchange.submit_order({
-                    'market': 'KRW-BTC',
-                    'side': 'ask',
-                    'volume': str(account_btc_value),
-                    'ord_type': 'market',
-                })
+        if bb_breakout_signal == Signal.LONG_EXIT_SIGNAL:
+            print('exit signal')
+            res = upbit.submit_order({
+                'market': 'KRW-BTC',
+                'side': 'ask',
+                'volume': str(account_btc_value),
+                'ord_type': 'market',
+            })
                 
             
 

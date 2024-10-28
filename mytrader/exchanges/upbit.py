@@ -62,7 +62,7 @@ class Upbit():
             print(f'{res.status_code} {res.reason}')
         data = res.json()
         df = pd.DataFrame(data, columns=['candle_date_time_kst', 'opening_price', 'high_price', 'low_price', 'trade_price', 'candle_acc_trade_volume'])
-        df.columns.rename({'candle_date_time_kst': 'timestamp', 
+        df.rename(columns={'candle_date_time_kst': 'timestamp', 
                            'opening_price': 'open',
                            'high_price': 'high',
                            'low_price': 'low',
@@ -70,7 +70,6 @@ class Upbit():
                            'candle_acc_trade_volume': 'volume'}, 
                           inplace=True)
         df.set_index('timestamp', inplace=True)
-        print(df)
         return df
     
     def submit_order(self, params):

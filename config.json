@@ -1,3 +1,24 @@
 {
-    "symbol": ""
+    "Upbit": {
+        "activate": true,
+        "strategies": [{
+            "name": "BolingerbandBreakout",
+            "symbol": ["KRW-BTC"],
+            "order_size": "",
+            "order_type": "",
+            "volume_threshold": ""
+        }],
+        "store_data": false
+    },
+    "KoreaInvestment": {
+        "activate": false,
+        "strategies": [{
+          "name": "ETFLongShort",
+          "symbol": ["001523", "001234"],
+          "order_size": "",
+          "order_type": "",
+          "volume_threshold": ""
+        }],
+        "store_data": false
+    }
 }
